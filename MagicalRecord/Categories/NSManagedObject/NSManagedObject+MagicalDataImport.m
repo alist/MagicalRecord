@@ -170,29 +170,29 @@ NSString * const kMagicalRecordImportAttributeUseDefaultValueWhenNotPresent = @"
 
 - (BOOL) MR_preImport:(id)objectData;
 {
-    if ([self respondsToSelector:@selector(shouldImport:)])
+    if ([self respondsToSelector:NSSelectorFromString(@"shouldImport:")])
     {
-        BOOL shouldImport = (BOOL)[self performSelector:@selector(shouldImport:) withObject:objectData];
+        BOOL shouldImport = (BOOL)[self performSelector:NSSelectorFromString(@"shouldImport:") withObject:objectData];
         if (!shouldImport) 
         {
             return NO;
         }
     }   
 
-    if ([self respondsToSelector:@selector(willImport:)])
+    if ([self respondsToSelector:NSSelectorFromString(@"willImport:")])
     {
-        [self performSelector:@selector(willImport:) withObject:objectData];
+        [self performSelector:NSSelectorFromString(@"willImport:") withObject:objectData];
     }
-    MR_swapMethodsFromClass([objectData class], @selector(valueForUndefinedKey:), @selector(MR_valueForUndefinedKey:));
+    MR_swapMethodsFromClass([objectData class], @selector(valueForUndefinedKey:), NSSelectorFromString(@"MR_valueForUndefinedKey:"));
     return YES;
 }
 
 - (BOOL) MR_postImport:(id)objectData;
 {
-    MR_swapMethodsFromClass([objectData class], @selector(valueForUndefinedKey:), @selector(MR_valueForUndefinedKey:));
-    if ([self respondsToSelector:@selector(didImport:)])
+    MR_swapMethodsFromClass([objectData class], @selector(valueForUndefinedKey:), NSSelectorFromString(@"MR_valueForUndefinedKey:"));
+    if ([self respondsToSelector:NSSelectorFromString(@"didImport:")])
     {
-        [self performSelector:@selector(didImport:) withObject:objectData];
+        [self performSelector:NSSelectorFromString(@"didImport:") withObject:objectData];
     }
     return YES;
 }
